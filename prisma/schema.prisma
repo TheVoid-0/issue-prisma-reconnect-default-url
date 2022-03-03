@@ -1,0 +1,23 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+    id Int                  @id @default(autoincrement())
+    name String
+    device  Device?
+}
+
+model Device {
+    id Int                  @id @default(autoincrement())
+    type String
+    userId Int?             
+    user   User?             @relation(fields: [userId], references: [id])
+}
