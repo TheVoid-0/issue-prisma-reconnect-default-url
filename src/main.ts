@@ -23,6 +23,28 @@ async function bootstrap() {
   } catch (error) {
     console.log('oops, tried to reconnect to default url!', error);
   }
+
+  // Create client with custom URL
+  const prismaClient2 = new PrismaClient({
+    datasources: {
+      db: { url: prepareUrl() },
+    },
+  });
+
+  console.log('first log', await prismaClient2.$queryRaw`SELECT 1`);
+
+  await prismaClient2.$disconnect();
+  console.log('disconnected');
+
+  try {
+    console.log('second log', await prismaClient2.$connect());
+    await app.listen(3000);
+  } catch (error) {
+    console.log(
+      'oops, tried to reconnect to default url again MARVELOUS!',
+      error,
+    );
+  }
 }
 bootstrap();
 
